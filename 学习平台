@@ -1,23 +1,107 @@
-技术栈：vite + vue3 + pinia
+使用的技术栈： vite + vue3 + pinia 
 
-一：创建项目
+做的项目：https://www.xuexiluxian.cn/
 
-    pnpm create vite@latest sass
+一、创建项目
 
-二: 安装 router
+	pnpm create vite@/latest sass
 
-    pnpm install vue-router -s
+二、安装router
 
-三: 插件与项目配置
+	2.1 npm install vue-router@4 -S
 
-    自动导入 vue相关api
-        下载: pnpm install unplugin-auto-import -D
-        导入: 
-            ```js
-            // main.js
-            import AutoImport from 'unplugin-auto-import/vite'
+	2.2 在src目录新建router/index.js
 
-        
+	import { createRouter, createWebHistory } from "vue-router";
+	import Home from "../views/Home.vue";
+
+	const routes = [
+	  {
+	    path: "/",
+	    name: "Home",
+	    component: Home,
+	  },
+	  {
+	    path: "/about",
+	    name: "About",
+	    component: () =>
+	      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+	  },
+	];
+
+	const router = createRouter({
+	  history: createWebHistory(),
+	  routes,
+	});
+
+	export default router;	
+	
+三、unplugin-auto-import插件 和 @代表src目录
+
+	3.1 npm i unplugin-auto-import -D
+	3.2 在vite.config.js中进行配置
+		import { defineConfig } from 'vite'
+		import vue from '@vitejs/plugin-vue';
+		//引入插件
+		import AutoImport from 'unplugin-auto-import/vite';
+
+		import path from 'path';
+		export default defineConfig({
+		  plugins: [
+		  	vue(),
+		  	//配置插件
+		  	AutoImport({
+		  		imports:['vue','vue-router']
+		  	})
+		  ],
+		  resolve: {
+		    // 配置路径别名
+		    alias: {
+		      '@': path.resolve(__dirname, './src'),
+		    },
+		  },
+		});
+
+四、element-plus
+
+	网址：https://element-plus.org/zh-CN/guide/design.html
+
+	4.1 下载 
+
+		npm install element-plus --save
+		npm install -D unplugin-vue-components unplugin-auto-import
+
+	4.2 配置修改vite.config.js
+
+		import { defineConfig } from 'vite'
+		import vue from '@vitejs/plugin-vue';
+		//引入插件
+		import AutoImport from 'unplugin-auto-import/vite';
+		import Components from 'unplugin-vue-components/vite'
+		import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+
+		const path = require('path');
+		export default defineConfig({
+		  plugins: [
+		    vue(),
+		    //配置插件
+		    AutoImport({
+		      resolvers: [ElementPlusResolver()],
+		      imports:['vue','vue-router']
+		    }),
+		    Components({
+		      resolvers: [ElementPlusResolver()],
+		    }),
+		  ],
+		  resolve: {
+		    // 配置路径别名
+		    alias: {
+		      '@': path.resolve(__dirname, './src'),
+		    },
+		  },
+		});
+
+五、  
 
 
 
