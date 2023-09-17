@@ -1,0 +1,23 @@
+技术栈：vite + vue3 + pinia
+
+一：创建项目
+
+    pnpm create vite@latest sass
+
+二: 安装 router
+
+    pnpm install vue-router -s
+
+三: 插件与项目配置
+
+    自动导入 vue相关api
+        下载: pnpm install unplugin-auto-import -D
+        导入: 
+            ```js
+            // main.js
+            import AutoImport from 'unplugin-auto-import/vite'
+
+        
+
+
+
