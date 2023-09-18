@@ -29,9 +29,9 @@
                     </li>
                 </ul>
                 <div class="swiper-img">
-                    <el-carousel :interval="5000" arrow="always">
-                        <el-carousel-item v-for="item in 4" :key="item">
-                        <h3 text="2xl" justify="center">{{ 12121 }}</h3>
+                    <el-carousel :interval="5000" arrow="always" v-if="silderList.length">
+                        <el-carousel-item v-for="item in silderList" :key="item.id">
+                            <img :src="item.imageUrl" alt="">
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -81,7 +81,15 @@
 
 <script setup>
 import { ArrowRight } from '@element-plus/icons-vue'
+import { getSilders } from '@/api/silder.js'
 
+const silderList = ref([])
+
+// 生命周期
+onBeforeMount(async () => {
+ const { data: { list }, meta } = await getSilders()
+ silderList.value = list
+})
 </script>
 
 <style lang="scss" scoped>
@@ -96,7 +104,7 @@ import { ArrowRight } from '@element-plus/icons-vue'
 
         .swiper-hd {
             display: flex;
-            height: 375px;
+            height: 373px;
             border-radius: 11px 11px 0px 0px;
             
             ul {
@@ -131,9 +139,12 @@ import { ArrowRight } from '@element-plus/icons-vue'
                 height: 100%;
 
                 .el-carousel {
-                    height: 373px;
-                    ::v-deep .el-carousel__container {
+                    :deep(.el-carousel__container) {
                         height: 373px;
+                    }
+                    img {
+                        width: 100%;
+                        height: 100%;
                     }
                     
                 }
