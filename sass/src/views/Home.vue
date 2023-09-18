@@ -2,6 +2,7 @@
     <div>
         <Header />
         <nav-swiper />
+        <new-course />
     </div>
 </template>
 
