@@ -3,6 +3,7 @@
         <Header />
         <nav-swiper />
         <new-course />
+        <Footer />
     </div>
 </template>
 
