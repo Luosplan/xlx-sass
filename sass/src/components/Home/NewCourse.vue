@@ -9,47 +9,14 @@
 				<div class='title-txt'>新上好课</div>
 			</div>
 			<ul class='new-course-b'>
-				<li>
-					<img src="@/assets/img/course1.png" />
+				<li v-for="item in courseList" :key="item.id">
+					<img :src="item.courseCover" />
 					<div class='course-content'>
-						<h3>晋级TypeScript高手，成为抢手的前端 开发人才</h3>
-						<div>中级 · 87人报名</div>
+						<h3>{{ item.courseName }}</h3>
+						<div>{{ courseTypeFn(item.courseLevel) }} · {{ item.clicks }}人报名</div>
 						<div class='price'>
 							<div class='price-vip'>会员专享</div>
-							<div class='price-total'>¥ 3688.00</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<img src="@/assets/img/course1.png" />
-					<div class='course-content'>
-						<h3>晋级TypeScript高手，成为抢手的前端 开发人才</h3>
-						<div>中级 · 87人报名</div>
-						<div class='price'>
-							<div class='price-vip'>会员专享</div>
-							<div class='price-total'>¥ 3688.00</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<img src="@/assets/img/course1.png" />
-					<div class='course-content'>
-						<h3>晋级TypeScript高手，成为抢手的前端 开发人才</h3>
-						<div>中级 · 87人报名</div>
-						<div class='price'>
-							<div class='price-vip'>会员专享</div>
-							<div class='price-total'>¥ 3688.00</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<img src="@/assets/img/course1.png" />
-					<div class='course-content'>
-						<h3>晋级TypeScript高手，成为抢手的前端 开发人才</h3>
-						<div>中级 · 87人报名</div>
-						<div class='price'>
-							<div class='price-vip'>会员专享</div>
-							<div class='price-total'>¥ 3688.00</div>
+							<div class='price-total'>¥ {{ item.discountPrice }}</div>
 						</div>
 					</div>
 				</li>
@@ -57,6 +24,28 @@
 		</div>
 	</div>
 </template>
+
+<script setup>
+import { getCourseList } from '@/api/course.js'
+import mixin from '@/mixins/courseTypeFn.js'
+
+console.log(getCourseList);
+const queryData = reactive({
+	pageNum: 1,
+	pageSize: 10,
+})
+
+let { courseTypeFn } = mixin();
+let courseList = ref([])
+
+onBeforeMount(async () => {
+	const { data: { pageInfo }, meta } = await getCourseList(queryData)
+	courseList.value = pageInfo.list
+})
+
+
+</script>
+
 
 <style scoped>
 .new-course{
@@ -109,16 +98,22 @@
 }
 .new-course-b{
 	display: flex;
-	justify-content: space-between;
+	flex-wrap: wrap;
+	padding-bottom: 38px;
 }
+
 .new-course-b li {
 	float: left;
 	margin-top: 38px;
+	margin-right: 10px;
 	width: 240px;
 	height: 275px;
 	background: #FFFFFF;
 	box-shadow: 1px 3px 3px rgba(27, 39, 94, 0.1);
 	border-radius: 5px;
+}
+.new-course-b li:has(:nth-child(4n)) {
+	margin-right: 0;
 }
 .new-course-b li img{
 	width: 240px;
@@ -142,8 +137,10 @@
 .price-vip{
 	width: 64px;
 	height: 16px;
+	line-height: 16px;
 	text-align: center;
 	color: #fff;
+	margin-right: 5px;
 	background: linear-gradient(90deg, #FF928E 0%, #FE7062 99%);
 	border-radius: 16px 0px 16px 0px;
 }
